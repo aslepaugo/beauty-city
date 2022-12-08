@@ -20,7 +20,7 @@ class User(models.Model):
 
     class Meta:
         verbose_name = 'Клиент'
-        verbose_name_plural = 'Мастера'
+        verbose_name_plural = 'Клиенты'
 
 
 class Master(models.Model):
@@ -49,9 +49,11 @@ class Master(models.Model):
 
 
 class Saloon(models.Model):
-    address = models.TextField(
+    address = models.CharField(
         'Адрес салона',
-        help_text='Адрес где находится салон')
+        help_text='Адрес где находится салон',
+        max_length=200,
+    )
     masters = models.ForeignKey(
         to=Master,
         on_delete=models.CASCADE,
@@ -59,7 +61,40 @@ class Saloon(models.Model):
         verbose_name='Мастер',
         null=True
     )
-    
+
     class Meta:
         verbose_name = 'Салон'
         verbose_name_plural = 'Салоны'
+
+
+class Service(models.Model):
+    name = models.CharField(
+        max_length=200,
+        verbose_name='Название услуги',
+    )
+    price = models.IntegerField(
+        verbose_name='Цена услуги'
+    )
+    date = models.DateField(
+        help_text='Дата записи',
+        verbose_name='Дата записи',
+    )
+    time = models.TimeField(
+        help_text='Время записи',
+        verbose_name='Время записи'
+    )
+    master = models.ForeignKey(
+        to=Master,
+        on_delete=models.CASCADE,
+        related_name='services',
+        verbose_name='Мастер',
+    )
+    saloon = models.ForeignKey(
+        to=Saloon,
+        on_delete=models.CASCADE,
+        verbose_name='Салон'
+    )
+
+    class Meta:
+        verbose_name = 'Услуга'
+        verbose_name_plural = 'Услуги'
