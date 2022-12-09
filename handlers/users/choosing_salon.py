@@ -27,4 +27,6 @@ async def handle_location(message: types.Message):
     latitude = message.location.latitude
     longitude = message.location.longitude
     user_coords = {'lat': latitude, 'lon': longitude}
-    await message.answer(user_coords, reply_markup=types.ReplyKeyboardRemove())
+    nearest_salon = orm_commands.get_nearest_salon(user_coords)
+    reply = f"Ближайший салон: {nearest_salon['title']} ({nearest_salon['address']})"
+    await message.answer(reply, reply_markup=types.ReplyKeyboardRemove())

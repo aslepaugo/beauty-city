@@ -21,6 +21,15 @@ def get_all_salons():
     return [salon.title for salon in Saloon.objects.all()] 
 
 
+def get_nearest_salon(user_coordinates):
+    if len(user_coordinates) != 2:
+        return Saloon.objects.first().title
+    else:
+        saloons = Saloon.objects.values()
+        closest_salon = find_closest_lat_lon(user_coordinates, saloons)
+        return closest_salon
+
+
 def get_list():
     saloon = Saloon.objects.all()
     return saloon
