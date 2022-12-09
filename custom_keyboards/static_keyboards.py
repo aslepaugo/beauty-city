@@ -61,3 +61,22 @@ approval_kb = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
+approval_nearest_salon_kb = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='Подтвердить'),
+            KeyboardButton(text='Выбрать салон из списка...')
+        ]
+    ],
+    resize_keyboard=True
+)
+
+approval_service_kb = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='Подтвердить услугу'),
+            KeyboardButton(text='Другие услуги')
+        ]
+    ],
+    resize_keyboard=True
+)
