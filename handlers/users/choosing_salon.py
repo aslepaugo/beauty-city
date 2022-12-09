@@ -22,7 +22,7 @@ async def command_inline(message: types.Message):
 
 @dp.message_handler(content_types=['location'])
 async def handle_location(message: types.Message):
-    lat = message.location.latitude
-    lon = message.location.longitude
-    reply = "latitude:  {}\nlongitude: {}".format(lat, lon)
-    await message.answer(reply, reply_markup=types.ReplyKeyboardRemove())
+    latitude = message.location.latitude
+    longitude = message.location.longitude
+    user_coords = {'lat': latitude, 'lon': longitude}
+    await message.answer(user_coords, reply_markup=types.ReplyKeyboardRemove())
