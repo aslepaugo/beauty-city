@@ -4,6 +4,8 @@ from aiogram.dispatcher import FSMContext
 from states.user_registration_states import User_registration
 from custom_keyboards.static_keyboards import approval_kb
 
+import orm_commands
+
 
 def unify_phone(raw_input: str):
     only_numbers = [number for number in raw_input if number in '0123456789']
@@ -46,6 +48,12 @@ async def state_enter_phone_number(message: types.Message, state: FSMContext):
             f'Телефон: {phone_number}\n'
             f'Данные в базу:\n {data}'
         )
+        orm_commands.User.objects.get_or_create(
+            telegram_id=data['telegram_id'],
+            fullname=data.get("fullname"),
+            phone_number=phone_number
+            )
+
         await state.finish()
     else:
         await message.answer('Введен некорректный номер телефона, попробуйте еще раз')
