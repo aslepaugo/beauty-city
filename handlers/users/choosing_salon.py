@@ -19,3 +19,10 @@ async def command_inline(message: types.Message):
 @dp.message_handler(text='Ближайший салон')
 async def command_inline(message: types.Message):
     await message.answer(f'Ближайший салон: {nearest_salon}')
+
+@dp.message_handler(content_types=['location'])
+async def handle_location(message: types.Message):
+    lat = message.location.latitude
+    lon = message.location.longitude
+    reply = "latitude:  {}\nlongitude: {}".format(lat, lon)
+    await message.answer(reply, reply_markup=types.ReplyKeyboardRemove())

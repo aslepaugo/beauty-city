@@ -35,7 +35,7 @@ st2_kb_menu = ReplyKeyboardMarkup(
 st3_kb_menu = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='Ближайший салон'),
+            KeyboardButton(text='Ближайший салон', request_location=True),
             KeyboardButton(text='Выбрать салон из списка...'),
         ],
     ],
