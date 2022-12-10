@@ -1,6 +1,8 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
+from .utils.geo_helper import get_lat_lon
+
 
 class User(models.Model):
     telegram_id = models.IntegerField(
@@ -49,10 +51,9 @@ class Master(models.Model):
 
 
 class Saloon(models.Model):
-    CHOICES = (
-        (0, 'Парикмахерские услуги'),
-        (1, 'Ногтевой сервис'),
-        (2, 'Макияж'),
+    title = models.CharField(
+        'Имя салона',
+        max_length= 256
     )
     address = models.CharField(
         'Адрес салона',
@@ -67,6 +68,12 @@ class Saloon(models.Model):
         null=True,
         blank=True
     )
+    lat = models.FloatField(default=None, blank=True, null=True)
+    lon = models.FloatField(default=None, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.lat, self.lon = get_lat_lon(self.address)
+        super(Saloon, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Салон'
