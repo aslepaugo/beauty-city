@@ -49,6 +49,11 @@ class Master(models.Model):
 
 
 class Saloon(models.Model):
+    CHOICES = (
+        (0, 'Парикмахерские услуги'),
+        (1, 'Ногтевой сервис'),
+        (2, 'Макияж'),
+    )
     address = models.CharField(
         'Адрес салона',
         help_text='Адрес где находится салон',
@@ -59,7 +64,8 @@ class Saloon(models.Model):
         on_delete=models.CASCADE,
         related_name='saloons',
         verbose_name='Мастер',
-        null=True
+        null=True,
+        blank=True
     )
 
     class Meta:
