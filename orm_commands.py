@@ -16,11 +16,29 @@ from timetable.models import (
 
 from timetable.utils.geo_helper import find_closest_lat_lon
 
-def is_user_registration(): #реализовать функцию запроса данных пользователя
-    # есть регистрация
-    return {'telegram_id': 55555555, 'fullname': 'Роман', 'phone_number':'9876543211'}
-    # нет регистрации
-    # return False
+def is_user_registered(telegram_id):
+    user = {}
+    try:
+        user_object = User.objects.get(telegram_id=telegram_id)
+        if user_object:
+            user = {
+                'telegram_id': user_object.telegram_id,
+                'fullname': user_object.fullname,
+                'phone_number': user_object.phone_number
+            }
+        
+    except User.DoesNotExist:
+        print('нет пользователя')
+
+    if user:
+        return user
+    else:
+        return False
+        
+
+def delete_all_User():
+    User.objects.all().delete()
+
 
 def get_all_salons():
     return [salon.title for salon in Saloon.objects.all()] 

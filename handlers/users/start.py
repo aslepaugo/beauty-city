@@ -4,7 +4,7 @@ from custom_keyboards.static_keyboards import *
 from states.global_states import Global
 from aiogram.dispatcher import FSMContext
 from transitions.transitions import *
-
+from orm_commands import is_user_registered
 
 @dp.message_handler(commands='start')
 async def command_start(message: types.Message):
@@ -40,7 +40,25 @@ async def handler_start_oder(message: types.Message, state: FSMContext):
         await goto_masters (message, state)
 
 @dp.message_handler(text='Личный кабинет')
-async def command_inline(message: types.Message):
+async def command_inline(message: types.Message, state: FSMContext):
     await message.answer('Добро пожаловать в личный кабинет!')
-    await message.answer('Данные о регистрации(имя, телефон)', reply_markup=personal_account_kb)
+    user = is_user_registered(message.from_id)
+    if user:
+        await message.answer(
+            f'Данные о регистрации\n'
+            f'Имя: {user.get("fullname")}\n'
+            f'Телефон: {user.get("phone_number")}\n'
+            f'Telegram id: {user.get("telegram_id")}',
+            reply_markup=personal_account_kb
+        )
+    else:
+        await message.answer(
+            'Нет данных о регистрации',
+            reply_markup=personal_account_kb
+        )
+
+@dp.message_handler(text='Главное меню')
+async def command_inline(message: types.Message, state: FSMContext):
+   await goto_start(message, state)
+
       
