@@ -139,7 +139,7 @@ class Service(models.Model):
 
 
     def __str__(self):
-        return f'{self.name}, {self.status}, {self.saloon}, {self.date}, {self.time}'
+        return f'{self.name}, {self.status}, {self.saloon}, {self.date}, {self.master}, {self.time}'
 
 
     class Meta:
