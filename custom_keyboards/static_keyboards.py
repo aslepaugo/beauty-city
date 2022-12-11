@@ -104,7 +104,9 @@ confirm_slot_kb = ReplyKeyboardMarkup(
 ok_button_request_location = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='OK', request_location=True)
+            KeyboardButton(text='OK', request_location=True),
+            KeyboardButton(text='Выбрать салон из списка...')
+            
         ]
     ],
     resize_keyboard=True
@@ -123,6 +125,16 @@ clear_button = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text='Понятно')
+        ]
+    ],
+    resize_keyboard=True
+)
+
+finish_order_kb = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='Подтвердить заказ'),
+            KeyboardButton(text='Начать сначала')
         ]
     ],
     resize_keyboard=True

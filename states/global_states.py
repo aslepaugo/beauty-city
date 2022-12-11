@@ -3,6 +3,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 
 class Global(StatesGroup):
     start_oder = State()
+    start_bot = State()
 
     start_select_salon = State()
     select_salon = State()

@@ -30,6 +30,19 @@ async def handler_from_salon(message: types.Message, state: FSMContext):
             reply_markup=ok_button_request_location
         )
 
+@dp.message_handler(text='Выбрать салон из списка...')
+async def handle_location(message: types.Message, state: FSMContext):
+    await goto_salons(message, state)
+      #redis cache-----------
+    redis_dict = {}
+    for key in cursor.keys():
+        redis_dict[key.decode('utf-8')] = cursor.get(key).decode('utf-8')
+    cursor.flushdb()    
+    await state.update_data(redis_dict)
+    #-----------------------
+    
+
+
 @dp.message_handler(content_types=['location'])
 async def handle_location(message: types.Message, state: FSMContext):
     latitude = message.location.latitude
