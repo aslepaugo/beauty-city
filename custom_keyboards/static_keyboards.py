@@ -4,9 +4,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 personal_account_kb = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='Текущие записи'),
-            KeyboardButton(text='Выполненные услуги'),
-            KeyboardButton(text='Регистрация')  #для тестов
+            KeyboardButton(text='Главное меню')
         ]
     ],
     resize_keyboard=True

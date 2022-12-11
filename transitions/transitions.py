@@ -4,7 +4,7 @@ from custom_keyboards.static_keyboards import *
 from states.global_states import Global
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ReplyKeyboardRemove
-from orm_commands import is_user_registration
+from orm_commands import is_user_registered
 
 
 nearest_salon = {'title': 'nсалон1', 'address': 'nАдрес 1'}
@@ -69,7 +69,7 @@ async def goto_slot(message: types.Message, state: FSMContext):
     await Global.start_select_slot.set()
 
 async def goto_registration(message: types.Message, state: FSMContext):
-    user = is_user_registration()
+    user = is_user_registered(message.from_id)
     
     if user:
         await state.update_data(user)
