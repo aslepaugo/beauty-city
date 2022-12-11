@@ -13,7 +13,7 @@ class Master(admin.ModelAdmin):
     list_display = (
         'fullname', 'speciality',
     )
-    raw_id_fields = ()
+    raw_id_fields = ('saloon',)
 
 
 @admin.register(Saloon)
