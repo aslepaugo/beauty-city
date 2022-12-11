@@ -35,7 +35,7 @@ st2_kb_menu = ReplyKeyboardMarkup(
 st3_kb_menu = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='Ближайший салон', request_location=True),
+            KeyboardButton(text='Ближайший салон'),
             KeyboardButton(text='Выбрать салон из списка...'),
         ],
     ],
@@ -61,21 +61,40 @@ approval_kb = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-approval_nearest_salon_kb = ReplyKeyboardMarkup(
+confirm_salon_kb = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='Подтвердить'),
+            KeyboardButton(text='Подтвердить салон'),
             KeyboardButton(text='Выбрать салон из списка...')
         ]
     ],
     resize_keyboard=True
 )
 
-approval_service_kb = ReplyKeyboardMarkup(
+confirm_service_kb = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='Подтвердить услугу'),
-            KeyboardButton(text='Другие услуги')
+            KeyboardButton(text='Подтвердить выбор услуги'),
+            KeyboardButton(text='Выбрать другую услугу')
+        ]
+    ],
+    resize_keyboard=True
+)
+
+confirm_master_kb = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='Подтвердить выбор мастера'),
+            KeyboardButton(text='Выбрать другого мастера')
+        ]
+    ],
+    resize_keyboard=True
+)
+
+ok_button = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='OK', request_location=True)
         ]
     ],
     resize_keyboard=True
