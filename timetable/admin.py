@@ -24,7 +24,7 @@ class Saloon(admin.ModelAdmin):
 
 @admin.register(Service)
 class Service(admin.ModelAdmin):
-    list_display = ['name', 'time', 'date', 'saloon']
+    list_display = ['name', 'time', 'date', 'master', 'saloon']
 
 
 @admin.register(ServiceType)
