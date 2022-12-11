@@ -18,17 +18,30 @@ async def handler_from_salon(message: types.Message, state: FSMContext):
             f'Выберите салон из списка:', reply_markup=form_2_row_keyboard(salons)
         )
     elif message.text == 'Ближайший салон':
-        #redis cache
+        #----------redis cache
         data = await state.get_data()
         cursor.flushall()
         for key, value in data.items():
             cursor.set(key, value)
-        #------------
+        #---------------------
         await state.finish()
         await message.answer(
             'Будет определено Ваше местоположение, данная функция работает только на смартфонах',
-            reply_markup=ok_button
+            reply_markup=ok_button_request_location
         )
+
+@dp.message_handler(text='Выбрать салон из списка...')
+async def handle_location(message: types.Message, state: FSMContext):
+    await goto_salons(message, state)
+      #redis cache-----------
+    redis_dict = {}
+    for key in cursor.keys():
+        redis_dict[key.decode('utf-8')] = cursor.get(key).decode('utf-8')
+    cursor.flushdb()    
+    await state.update_data(redis_dict)
+    #-----------------------
+    
+
 
 @dp.message_handler(content_types=['location'])
 async def handle_location(message: types.Message, state: FSMContext):
@@ -74,8 +87,5 @@ async def command_confirm_salon(message: types.Message, state: FSMContext):
             await goto_date(message, state)
             
 
-    elif message.text == 'Выбрать салон из списка...':
-        await message.answer(
-            f'Выберите салон из списка:', reply_markup=form_2_row_keyboard(salons)
-        )
-        await Global.select_salon.set()
+    elif message.text == 'Выбрать другой салон':
+        await goto_salons(message, state)

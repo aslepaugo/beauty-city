@@ -1,13 +1,10 @@
 from aiogram import types
 from loader import dp
 from custom_keyboards.static_keyboards import *
-from custom_keyboards.dynamic_keyboards import form_2_row_keyboard
 from states.global_states import Global
 from aiogram.dispatcher import FSMContext
 from transitions.transitions import *
 
-services = ['Парикмахерская', 'Маникюр', 'Педикюр']
-masters = ['мастер1', 'Мастер2', 'мастер3', 'Мастер4', 'Мастер5', 'Мастер6', 'Мастер7', 'Мастер8']
 
 @dp.message_handler(commands='start')
 async def command_start(message: types.Message):
@@ -15,6 +12,13 @@ async def command_start(message: types.Message):
         f'Вас приветствует электронный администратор салонов Beauty city!\n'
         f'Здесь Вы сможете записаться на наши услуги', reply_markup=st1_kb_menu
     )
+@dp.message_handler(state=Global.start_bot)
+async def handler_start(message: types.Message, state: FSMContext):
+    await message.answer(
+        f'Вас приветствует электронный администратор салонов Beauty city!\n'
+        f'Здесь Вы сможете записаться на наши услуги', reply_markup=st1_kb_menu
+    )
+    await state.finish()
 
 @dp.message_handler(text=['Записаться', 'Начать заново'])
 async def command_start_oder(message: types.Message):

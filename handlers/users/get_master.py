@@ -1,7 +1,6 @@
 from aiogram import types
 from loader import dp
 from custom_keyboards.static_keyboards import *
-from custom_keyboards.dynamic_keyboards import form_2_row_keyboard
 from states.global_states import Global
 from aiogram.dispatcher import FSMContext
 from transitions.transitions import *
@@ -32,8 +31,4 @@ async def command_confirm_master(message: types.Message, state: FSMContext):
             await goto_services(message, state)
 
     elif message.text == 'Выбрать другого мастера':
-        await message.answer(
-                'Выберите нужную процедуру:',
-                reply_markup=form_2_row_keyboard(masters)
-            )
-        await Global.start_select_master.set()
+        await goto_masters(message, state)

@@ -65,7 +65,7 @@ confirm_salon_kb = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text='Подтвердить салон'),
-            KeyboardButton(text='Выбрать салон из списка...')
+            KeyboardButton(text='Выбрать другой салон')
         ]
     ],
     resize_keyboard=True
@@ -91,10 +91,50 @@ confirm_master_kb = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
+confirm_slot_kb = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='Подтвердить время'),
+            KeyboardButton(text='Выбрать другое время')
+        ]
+    ],
+    resize_keyboard=True
+)
+
+ok_button_request_location = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='OK', request_location=True),
+            KeyboardButton(text='Выбрать салон из списка...')
+            
+        ]
+    ],
+    resize_keyboard=True
+)
+
 ok_button = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='OK', request_location=True)
+            KeyboardButton(text='OK')
+        ]
+    ],
+    resize_keyboard=True
+)
+
+clear_button = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='Понятно')
+        ]
+    ],
+    resize_keyboard=True
+)
+
+finish_order_kb = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='Подтвердить заказ'),
+            KeyboardButton(text='Начать сначала')
         ]
     ],
     resize_keyboard=True
