@@ -4,6 +4,7 @@ from custom_keyboards.static_keyboards import *
 from states.global_states import Global
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ReplyKeyboardRemove
+from orm_commands import is_user_registration
 
 
 nearest_salon = {'title': 'nсалон1', 'address': 'nАдрес 1'}
@@ -52,7 +53,8 @@ async def goto_date(message: types.Message, state: FSMContext):
         f'DATA для тестирования {await state.get_data()}'
     )
     await message.answer(
-        f'Выберите дату', reply_markup=ok_button
+        f'Введите дату',
+        reply_markup=ReplyKeyboardRemove()
     )
     await Global.start_select_date.set()
 
@@ -67,20 +69,44 @@ async def goto_slot(message: types.Message, state: FSMContext):
     await Global.start_select_slot.set()
 
 async def goto_registration(message: types.Message, state: FSMContext):
-    await message.answer(
-        f'DATA для тестирования {await state.get_data()}'
-    )
-    await message.answer('Вы первый раз делаете заказ, необходимо пройти регистрацию')
-    await message.answer_document(
-        open("private_policy.pdf", "rb"),
-        reply_markup=approval_kb,
-        caption='Просим дать согласие на обработку персональных данных'
+    user = is_user_registration()
+    
+    if user:
+        await state.update_data(user)
+        await goto_finish_order(message, state)
+
+    else:
+        await message.answer(
+            f'DATA для тестирования {await state.get_data()}'
         )
-    await Global.start_registration.set()
+        await message.answer('Вы первый раз делаете заказ, необходимо пройти регистрацию')
+        await message.answer_document(
+            open("private_policy.pdf", "rb"),
+            reply_markup=approval_kb,
+            caption='Просим дать согласие на обработку персональных данных'
+            )
+        await Global.start_registration.set()
 
 async def goto_finish_order(message: types.Message, state: FSMContext):
+    order_data = await state.get_data()
     await message.answer(
-        f'DATA для тестирования {await state.get_data()}'
+        f"Данные заказа\n"
+        f"Ваше имя: {order_data.get('fullname')}\n"
+        f"Телефон: {order_data.get('phone_number')}\n"
+        f"Салон: {order_data.get('selected_salon')}\n"
+        f"Мастер: {order_data.get('selected_master')}\n"
+        f"Услуга: {order_data.get('selected_service')}\n"
+        f"Дата: {order_data.get('selected_date')}\n"
+        f"Время: {order_data.get('selected_slot')}\n",
+        reply_markup=finish_order_kb
     )
-    
-    
+    await Global.finish_order.set()
+
+
+async def goto_start(message: types.Message, state: FSMContext):
+    await Global.start_bot.set()
+    await message.answer(
+        'Спасибо, что воспользовались электронным администратором',
+        reply_markup=ok_button
+    )
+
