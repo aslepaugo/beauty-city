@@ -52,7 +52,8 @@ class Master(models.Model):
         verbose_name='Имя и фамилия мастера'
     )
     telegram_id = models.IntegerField(
-        verbose_name='Телеграм-ID мастера'
+        verbose_name='Телеграм-ID мастера',
+        unique=True,
     )
     speciality = models.ForeignKey(
         to=ServiceType,
