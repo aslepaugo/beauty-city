@@ -1,7 +1,6 @@
 from aiogram import types
 from loader import dp
 from custom_keyboards.static_keyboards import *
-from custom_keyboards.dynamic_keyboards import form_2_row_keyboard
 from states.global_states import Global
 from aiogram.dispatcher import FSMContext
 from transitions.transitions import *
@@ -32,10 +31,6 @@ async def command_confirm_service(message: types.Message, state: FSMContext):
             await goto_salons(message, state)
 
     elif message.text == 'Выбрать другую услугу':
-        await message.answer(
-                'Выберите нужную процедуру:',
-                reply_markup=form_2_row_keyboard(services)
-            )
-        await Global.start_select_service.set()
+        await goto_services(message, state)
 
 

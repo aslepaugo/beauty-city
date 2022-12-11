@@ -65,7 +65,7 @@ confirm_salon_kb = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text='Подтвердить салон'),
-            KeyboardButton(text='Выбрать салон из списка...')
+            KeyboardButton(text='Выбрать другой салон')
         ]
     ],
     resize_keyboard=True
@@ -86,6 +86,16 @@ confirm_master_kb = ReplyKeyboardMarkup(
         [
             KeyboardButton(text='Подтвердить выбор мастера'),
             KeyboardButton(text='Выбрать другого мастера')
+        ]
+    ],
+    resize_keyboard=True
+)
+
+confirm_slot_kb = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='Подтвердить время'),
+            KeyboardButton(text='Выбрать другое время')
         ]
     ],
     resize_keyboard=True

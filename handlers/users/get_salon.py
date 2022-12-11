@@ -74,8 +74,5 @@ async def command_confirm_salon(message: types.Message, state: FSMContext):
             await goto_date(message, state)
             
 
-    elif message.text == 'Выбрать салон из списка...':
-        await message.answer(
-            f'Выберите салон из списка:', reply_markup=form_2_row_keyboard(salons)
-        )
-        await Global.select_salon.set()
+    elif message.text == 'Выбрать другой салон':
+        await goto_salons(message, state)
