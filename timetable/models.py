@@ -32,6 +32,11 @@ class Saloon(models.Model):
 
     lat = models.FloatField(default=None, blank=True, null=True)
     lon = models.FloatField(default=None, blank=True, null=True)
+    master = models.ManyToManyField(
+        'Master',
+        verbose_name='Мастера в салоне',
+        related_name='Saloons'
+    )
 
     def save(self, *args, **kwargs):
         self.lat, self.lon = get_lat_lon(self.address)
@@ -65,7 +70,7 @@ class Master(models.Model):
     saloon = models.ForeignKey(
         to=Saloon,
         on_delete=models.CASCADE,
-        related_name='masters',
+        related_name='Saloon',
         verbose_name='Салон',
         null=True,
         blank=True
