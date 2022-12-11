@@ -105,6 +105,15 @@ class Service(models.Model):
         max_length=200,
         verbose_name='Название услуги',
     )
+    CHOICES = (
+        ('Payed', 'Оплачен'),
+        ('Done', 'Выполнен'),
+        ('Cancel', 'Отменен'),
+    )
+    status = models.CharField(
+        max_length=200,
+        choices=CHOICES
+    )
     price = models.IntegerField(
         verbose_name='Цена услуги'
     )
@@ -127,6 +136,11 @@ class Service(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Салон'
     )
+
+
+    def __str__(self):
+        return f'{self.name}, {self.status}, {self.saloon}, {self.date}, {self.time}'
+
 
     class Meta:
         verbose_name = 'Услуга'
