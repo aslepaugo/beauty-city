@@ -10,6 +10,13 @@ nearest_salon = {'title': 'nсалон1', 'address': 'nАдрес 1'}
 salons = ['Салон1','Салон2', 'Салон3', 'Салон4', 'Салон5']
 services = ['Парикмахерская', 'Маникюр', 'Педикюр'] 
 masters = ['мастер1', 'Мастер2', 'мастер3', 'Мастер4', 'Мастер5', 'Мастер6', 'Мастер7', 'Мастер8']
+slots = [
+    '8:00 - 9:45',
+    '10:00 - 11:45',
+    '14:00 - 15:45',
+    '16:00 - 17:45',
+    '18:00 - 19:45'
+    ]
 
 async def goto_masters(message: types.Message, state: FSMContext):
     await message.answer(
@@ -45,7 +52,26 @@ async def goto_date(message: types.Message, state: FSMContext):
         f'DATA для тестирования {await state.get_data()}'
     )
     await message.answer(
-        f'Пока все', reply_markup=ReplyKeyboardRemove()
+        f'Выберите дату', reply_markup=ok_button
+    )
+    await Global.start_select_date.set()
+
+async def goto_slot(message: types.Message, state: FSMContext):
+    await message.answer(
+        f'DATA для тестирования {await state.get_data()}'
+    )
+    await message.answer(
+        'Выберите удобное время:',
+        reply_markup=form_2_row_keyboard(slots)
+    )
+    await Global.start_select_slot.set()
+
+async def goto_registration(message: types.Message, state: FSMContext):
+    await message.answer(
+        f'DATA для тестирования {await state.get_data()}'
+    )
+    await message.answer( 
+        'пока все',
+        reply_markup=ReplyKeyboardRemove()
     )
     await state.finish()
-    pass # дописать

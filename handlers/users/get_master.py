@@ -32,8 +32,4 @@ async def command_confirm_master(message: types.Message, state: FSMContext):
             await goto_services(message, state)
 
     elif message.text == 'Выбрать другого мастера':
-        await message.answer(
-                'Выберите нужную процедуру:',
-                reply_markup=form_2_row_keyboard(masters)
-            )
-        await Global.start_select_master.set()
+        await goto_masters(message, state)
