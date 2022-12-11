@@ -73,19 +73,8 @@ async def goto_registration(message: types.Message, state: FSMContext):
     
     if user:
         await state.update_data(user)
-        order_data = await state.get_data()
-        await message.answer(
-            f"Данные заказа\n"
-            f"Ваше имя: {order_data.get('fullname')}\n"
-            f"Телефон: {order_data.get('phone_number')}\n"
-            f"Салон: {order_data.get('selected_salon')}\n"
-            f"Мастер: {order_data.get('selected_master')}\n"
-            f"Услуга: {order_data.get('selected_service')}\n"
-            f"Дата: {order_data.get('selected_date')}\n"
-            f"Время: {order_data.get('selected_slot')}\n",
-            reply_markup=finish_order_kb
-        )
-        await Global.finish_order.set()
+        await goto_finish_order(message, state)
+
     else:
         await message.answer(
             f'DATA для тестирования {await state.get_data()}'
@@ -97,6 +86,21 @@ async def goto_registration(message: types.Message, state: FSMContext):
             caption='Просим дать согласие на обработку персональных данных'
             )
         await Global.start_registration.set()
+
+async def goto_finish_order(message: types.Message, state: FSMContext):
+    order_data = await state.get_data()
+    await message.answer(
+        f"Данные заказа\n"
+        f"Ваше имя: {order_data.get('fullname')}\n"
+        f"Телефон: {order_data.get('phone_number')}\n"
+        f"Салон: {order_data.get('selected_salon')}\n"
+        f"Мастер: {order_data.get('selected_master')}\n"
+        f"Услуга: {order_data.get('selected_service')}\n"
+        f"Дата: {order_data.get('selected_date')}\n"
+        f"Время: {order_data.get('selected_slot')}\n",
+        reply_markup=finish_order_kb
+    )
+    await Global.finish_order.set()
 
 
 async def goto_start(message: types.Message, state: FSMContext):
