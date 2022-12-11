@@ -19,4 +19,9 @@ class Global(StatesGroup):
     start_select_slot = State()
     confirm_slot = State()
 
-    registration = State()
+    start_registration = State()
+    enter_name = State()
+    enter_phone_number = State()
+    cancel = State()
+
+    finish_order = State()

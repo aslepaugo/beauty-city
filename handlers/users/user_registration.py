@@ -1,9 +1,9 @@
 from loader import dp
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from states.user_registration_states import User_registration
-from custom_keyboards.static_keyboards import approval_kb
-
+from states.global_states import Global
+from transitions.transitions import *
+from custom_keyboards.static_keyboards import clear_button
 import orm_commands
 
 
@@ -18,48 +18,51 @@ def unify_phone(raw_input: str):
     else:
         return False
 
-@dp.message_handler(text=['Регистрация', 'Отказ'])
-async def register(message: types.Message):
-    await message.answer('Вы первый раз делаете заказ, необходимо пройти регистрацию')
-    await message.answer_document(
-        open("private_policy.pdf", "rb"),
-        reply_markup=approval_kb,
-        caption='Просим дать согласие на обработку персональных данных'
+
+@dp.message_handler(state=Global.start_registration)
+async def register(message: types.Message, state: FSMContext):
+    if message.text == 'Согласен(на)':
+        await message.answer(
+            'Введите своё имя:',
+            reply_markup=types.ReplyKeyboardRemove()
         )
+        await Global.enter_name.set()
+    else:
+        await message.answer(
+            'Для продолжения необходимо дать разрешение на обработку персональных данных',
+            reply_markup=clear_button
+        )
+        await Global.cancel.set()
 
-@dp.message_handler(text='Согласен(на)')
-async def register(message: types.Message):
-    await message.answer(
-        'Введите своё имя:',
-        reply_markup=types.ReplyKeyboardRemove()
-    )
-    await User_registration.enter_name.set()
+@dp.message_handler(state=Global.cancel)
+async def handler_cancel(message: types.Message, state: FSMContext):
+    await goto_registration(message, state) 
 
-@dp.message_handler(state=User_registration.enter_name)
+@dp.message_handler(state=Global.enter_name)
 async def state_enter_name(message: types.Message, state: FSMContext):
     user_name = message.text
     await state.update_data(fullname=user_name)
     await message.answer('Введите номер телефона:')
-    await User_registration.enter_phone_number.set()
+    await Global.enter_phone_number.set()
 
-@dp.message_handler(state=User_registration.enter_phone_number)
+@dp.message_handler(state=Global.enter_phone_number)
 async def state_enter_phone_number(message: types.Message, state: FSMContext):
     phone_number = unify_phone(message.text)
     if phone_number:
         await state.update_data(phone_number=phone_number)
-        data = await state.get_data()
-        data['telegram_id'] = message.from_id
+        registration_data = await state.get_data()
+        registration_data['telegram_id'] = message.from_id
         await message.answer(
-            f'Имя: {data.get("fullname")}\n'
+            f'Имя: {registration_data.get("fullname")}\n'
             f'Телефон: {phone_number}\n'
         )
         orm_commands.User.objects.get_or_create(
-            telegram_id=data['telegram_id'],
-            fullname=data.get("fullname"),
+            telegram_id=registration_data['telegram_id'],
+            fullname=registration_data.get("fullname"),
             phone_number=phone_number
             )
-
-        await state.finish()
+        await state.update_data(registration_data)
+        await goto_finish_order (message, state)
     else:
         await message.answer(
             'Введен некорректный номер телефона, попробуйте еще раз'
