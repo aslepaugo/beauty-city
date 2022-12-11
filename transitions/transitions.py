@@ -70,8 +70,17 @@ async def goto_registration(message: types.Message, state: FSMContext):
     await message.answer(
         f'DATA для тестирования {await state.get_data()}'
     )
-    await message.answer( 
-        'пока все',
-        reply_markup=ReplyKeyboardRemove()
+    await message.answer('Вы первый раз делаете заказ, необходимо пройти регистрацию')
+    await message.answer_document(
+        open("private_policy.pdf", "rb"),
+        reply_markup=approval_kb,
+        caption='Просим дать согласие на обработку персональных данных'
+        )
+    await Global.start_registration.set()
+
+async def goto_finish_order(message: types.Message, state: FSMContext):
+    await message.answer(
+        f'DATA для тестирования {await state.get_data()}'
     )
-    await state.finish()
+    
+    

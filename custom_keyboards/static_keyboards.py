@@ -101,10 +101,28 @@ confirm_slot_kb = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-ok_button = ReplyKeyboardMarkup(
+ok_button_request_location = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text='OK', request_location=True)
+        ]
+    ],
+    resize_keyboard=True
+)
+
+ok_button = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='OK')
+        ]
+    ],
+    resize_keyboard=True
+)
+
+clear_button = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='Понятно')
         ]
     ],
     resize_keyboard=True

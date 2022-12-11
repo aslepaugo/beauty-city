@@ -18,16 +18,16 @@ async def handler_from_salon(message: types.Message, state: FSMContext):
             f'Выберите салон из списка:', reply_markup=form_2_row_keyboard(salons)
         )
     elif message.text == 'Ближайший салон':
-        #redis cache
+        #----------redis cache
         data = await state.get_data()
         cursor.flushall()
         for key, value in data.items():
             cursor.set(key, value)
-        #------------
+        #---------------------
         await state.finish()
         await message.answer(
             'Будет определено Ваше местоположение, данная функция работает только на смартфонах',
-            reply_markup=ok_button
+            reply_markup=ok_button_request_location
         )
 
 @dp.message_handler(content_types=['location'])
