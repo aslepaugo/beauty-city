@@ -13,6 +13,7 @@ class Master(admin.ModelAdmin):
     list_display = (
         'fullname', 'speciality',
     )
+    raw_id_fields = ()
 
 
 @admin.register(Saloon)
@@ -24,6 +25,7 @@ class Saloon(admin.ModelAdmin):
 @admin.register(Service)
 class Service(admin.ModelAdmin):
     list_display = ['name', 'time', 'date', 'saloon']
+
 
 @admin.register(ServiceType)
 class ServiceType(admin.ModelAdmin):
