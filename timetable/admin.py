@@ -17,7 +17,7 @@ class Master(admin.ModelAdmin):
 
 @admin.register(Saloon)
 class Saloon(admin.ModelAdmin):
-    list_display = ['address']
+    list_display = ['title', 'address']
     readonly_fields = ['lat', 'lon']
 
 
