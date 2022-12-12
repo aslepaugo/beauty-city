@@ -23,9 +23,9 @@ slots = [
     ] # реализовать функцию в зависимости от наполнения await state.get_data()
 
 async def goto_masters(message: types.Message, state: FSMContext):
-    await message.answer(
-        f'DATA для тестирования {await state.get_data()}'
-    )
+    # await message.answer(
+    #     f'DATA для тестирования {await state.get_data()}'
+    # )
     await Global.start_select_master.set()
     await message.answer(
         'Выберите мастера',
@@ -33,9 +33,9 @@ async def goto_masters(message: types.Message, state: FSMContext):
     )
 
 async def goto_services(message: types.Message, state: FSMContext):
-    await message.answer(
-        f'DATA для тестирования {await state.get_data()}'
-    )
+    # await message.answer(
+    #     f'DATA для тестирования {await state.get_data()}'
+    # )
     await message.answer(
         'Выберите нужную процедуру:',
         reply_markup=form_2_row_keyboard(services)
@@ -43,18 +43,18 @@ async def goto_services(message: types.Message, state: FSMContext):
     await Global.start_select_service.set()
 
 async def goto_salons(message: types.Message, state: FSMContext):
-    await message.answer(
-        f'DATA для тестирования {await state.get_data()}'
-    )
+    # await message.answer(
+    #     f'DATA для тестирования {await state.get_data()}'
+    # )
     await message.answer(
         f'Вы можете выбрать ближайший к Вам салон,\n'
         f'либо выбрать салон из списка:', reply_markup=st3_kb_menu)
     await Global.start_select_salon.set()
 
 async def goto_date(message: types.Message, state: FSMContext, error=None):
-    await message.answer(
-        f'DATA для тестирования {await state.get_data()}'
-    )
+    # await message.answer(
+    #     f'DATA для тестирования {await state.get_data()}'
+    # )
     if error is None:
         await message.answer(
             f'Введите дату в формате (dd/mm/yyyy)',
@@ -69,9 +69,9 @@ async def goto_date(message: types.Message, state: FSMContext, error=None):
         await Global.start_select_date.set()
 
 async def goto_slot(message: types.Message, state: FSMContext):
-    await message.answer(
-        f'DATA для тестирования {await state.get_data()}'
-    )
+    # await message.answer(
+    #     f'DATA для тестирования {await state.get_data()}'
+    # )
     await message.answer(
         'Выберите удобное время:',
         reply_markup=form_2_row_keyboard(slots)
@@ -86,9 +86,9 @@ async def goto_registration(message: types.Message, state: FSMContext):
         await goto_finish_order(message, state)
 
     else:
-        await message.answer(
-            f'DATA для тестирования {await state.get_data()}'
-        )
+        # await message.answer(
+        #     f'DATA для тестирования {await state.get_data()}'
+        # )
         await message.answer('Вы первый раз делаете заказ, необходимо пройти регистрацию')
         await message.answer_document(
             open("private_policy.pdf", "rb"),
@@ -99,9 +99,9 @@ async def goto_registration(message: types.Message, state: FSMContext):
 
 async def goto_finish_order(message: types.Message, state: FSMContext):
     order_data = await state.get_data()
-    await message.answer(
-        f'DATA для тестирования {await state.get_data()}'
-    )
+    # await message.answer(
+    #     f'DATA для тестирования {await state.get_data()}'
+    # )
     await message.answer(
         f"Данные заказа\n"
         f"Ваше имя: {order_data.get('fullname')}\n"
