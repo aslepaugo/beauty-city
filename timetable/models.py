@@ -39,9 +39,10 @@ class Master(models.Model):
         help_text='Введите специальность',
         verbose_name='Специальность мастера',
     )
-    saloon = models.CharField(
-        max_length=1000,
-        help_text='Салон в котором работает мастер',
+    saloon = models.ForeignKey(
+        to=Saloon,
+        on_delete=models.CASCADE,
+        related_name='masters',
         verbose_name='Салон',
     )
 
