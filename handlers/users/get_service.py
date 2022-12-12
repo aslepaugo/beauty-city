@@ -9,12 +9,15 @@ from transitions.transitions import *
 @dp.message_handler(state=Global.start_select_service)
 async def handler_start_select_service(message: types.Message, state: FSMContext):
     selected_service = message.text
-    await state.update_data(selected_service= selected_service)
-    await message.answer(
-        f'Выбрана услуга: {selected_service}',
-        reply_markup=confirm_service_kb
-    )
-    await Global.confirm_service.set()
+    if selected_service == 'Шаг назад':
+        await goto_services(message, state)
+    else:
+        await state.update_data(selected_service= selected_service)
+        await message.answer(
+            f'Выбрана услуга: {selected_service}',
+            reply_markup=confirm_service_kb
+        )
+        await Global.confirm_service.set()
 
 @dp.message_handler(state=Global.confirm_service)
 async def command_confirm_service(message: types.Message, state: FSMContext):

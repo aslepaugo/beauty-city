@@ -48,9 +48,7 @@ def get_all_salons():
 
 
 def get_all_services():
-    print([service.name for service in ServiceType.objects.all()])
-    return [service.name for service in ServiceType.objects.all()]
-
+    return [f'{service.name} {str(service.price)} руб.' for service in ServiceType.objects.all()]
 
 def get_all_masters():
     return [master.fullname for master in Master.objects.all()]

@@ -9,12 +9,15 @@ from transitions.transitions import *
 @dp.message_handler(state=Global.start_select_master)
 async def handler_start_select_master(message: types.Message, state: FSMContext):
     selected_master = message.text
-    await state.update_data(selected_master=selected_master)
-    await message.answer(
-        f'Выбран мастер: {selected_master}',
-        reply_markup=confirm_master_kb
-    )
-    await Global.confirm_master.set()
+    if selected_master == 'Шаг назад':
+        await goto_masters(message, state)
+    else:
+        await state.update_data(selected_master=selected_master)
+        await message.answer(
+            f'Выбран мастер: {selected_master}',
+            reply_markup=confirm_master_kb
+        )
+        await Global.confirm_master.set()
 
 @dp.message_handler(state=Global.confirm_master)
 async def command_confirm_master(message: types.Message, state: FSMContext):
