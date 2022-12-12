@@ -29,4 +29,4 @@ class Service(admin.ModelAdmin):
 
 @admin.register(ServiceType)
 class ServiceType(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['name', 'price']
