@@ -2,7 +2,7 @@ from loader import dp
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from states.global_states import Global
-from transitions.transitions import *
+import transitions.transitions
 from custom_keyboards.static_keyboards import clear_button
 import orm_commands
 
@@ -36,7 +36,7 @@ async def register(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=Global.cancel)
 async def handler_cancel(message: types.Message, state: FSMContext):
-    await goto_registration(message, state) 
+    await transitions.transitions.goto_registration(message, state) 
 
 @dp.message_handler(state=Global.enter_name)
 async def state_enter_name(message: types.Message, state: FSMContext):
@@ -62,7 +62,7 @@ async def state_enter_phone_number(message: types.Message, state: FSMContext):
             phone_number=phone_number
             )
         await state.update_data(registration_data)
-        await goto_finish_order (message, state)
+        await transitions.transitions.goto_finish_order(message, state)
     else:
         await message.answer(
             'Введен некорректный номер телефона, попробуйте еще раз'

@@ -8,17 +8,16 @@ from orm_commands import is_user_registered
 from handlers.users.user_registration import unify_phone
 
 
-nearest_salon = {'title': 'nсалон1', 'address': 'nАдрес 1'}
-salons = ['Салон1','Салон2', 'Салон3', 'Салон4', 'Салон5']
-services = ['Парикмахерская', 'Маникюр', 'Педикюр'] 
-masters = ['мастер1', 'Мастер2', 'мастер3', 'Мастер4', 'Мастер5', 'Мастер6', 'Мастер7', 'Мастер8']
+salons = ['Салон1','Салон2', 'Салон3', 'Салон4', 'Салон5']  # реализовать функцию в зависимости от наполнения await state.get_data()
+services = ['Парикмахерская', 'Маникюр', 'Педикюр'] # реализовать функцию в зависимости от наполнения await state.get_data()
+masters = ['мастер1', 'Мастер2', 'мастер3', 'Мастер4', 'Мастер5', 'Мастер6', 'Мастер7', 'Мастер8']# реализовать функцию в зависимости от наполнения await state.get_data()
 slots = [
     '8:00 - 9:45',
     '10:00 - 11:45',
     '14:00 - 15:45',
     '16:00 - 17:45',
     '18:00 - 19:45'
-    ]
+    ] # реализовать функцию в зависимости от наполнения await state.get_data()
 
 async def goto_masters(message: types.Message, state: FSMContext):
     await message.answer(
@@ -90,6 +89,9 @@ async def goto_registration(message: types.Message, state: FSMContext):
 
 async def goto_finish_order(message: types.Message, state: FSMContext):
     order_data = await state.get_data()
+    await message.answer(
+        f'DATA для тестирования {await state.get_data()}'
+    )
     await message.answer(
         f"Данные заказа\n"
         f"Ваше имя: {order_data.get('fullname')}\n"

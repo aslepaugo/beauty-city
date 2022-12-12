@@ -48,7 +48,7 @@ async def handle_location(message: types.Message, state: FSMContext):
     latitude = message.location.latitude
     longitude = message.location.longitude
     user_coords = {'lat': latitude, 'lon': longitude}
-    # nearest_salon = orm_commands.get_nearest_salon(user_coords)
+    nearest_salon = orm_commands.get_nearest_salon(user_coords)
 
     #redis cache-----------
     redis_dict = {}
