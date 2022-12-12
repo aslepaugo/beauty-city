@@ -10,6 +10,9 @@ class ServiceType(models.Model):
         verbose_name='Услуга',
         help_text='Введите тип услуги'
     )
+    price = models.IntegerField(
+        verbose_name='Цена услуги'
+    )
 
     def __str__(self):
         return f'{self.name}'
@@ -55,10 +58,6 @@ class Master(models.Model):
         max_length=100,
         help_text='Введите имя и фамилию мастера',
         verbose_name='Имя и фамилия мастера'
-    )
-    telegram_id = models.IntegerField(
-        verbose_name='Телеграм-ID мастера',
-        unique=True,
     )
     speciality = models.ForeignKey(
         to=ServiceType,
@@ -119,9 +118,6 @@ class Service(models.Model):
     status = models.CharField(
         max_length=200,
         choices=CHOICES
-    )
-    price = models.IntegerField(
-        verbose_name='Цена услуги'
     )
     date = models.DateField(
         help_text='Дата записи',
