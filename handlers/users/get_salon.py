@@ -48,7 +48,7 @@ async def handle_location(message: types.Message, state: FSMContext):
     latitude = message.location.latitude
     longitude = message.location.longitude
     user_coords = {'lat': latitude, 'lon': longitude}
-    # nearest_salon = orm_commands.get_nearest_salon(user_coords)
+    nearest_salon = orm_commands.get_nearest_salon(user_coords)
 
     #redis cache-----------
     redis_dict = {}
@@ -65,13 +65,16 @@ async def handle_location(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=Global.select_salon)
 async def command_select_salon(message: types.Message, state: FSMContext):
-    selected_salon = message.text    
-    await state.update_data(selected_salon=selected_salon)
-    await message.answer(
-        f'Выбран салон: {selected_salon}',
-        reply_markup=confirm_salon_kb
-    )
-    await Global.confirm_salon.set()
+    selected_salon = message.text
+    if selected_salon == 'Шаг назад':
+        await goto_salons(message, state)
+    else:    
+        await state.update_data(selected_salon=selected_salon)
+        await message.answer(
+            f'Выбран салон: {selected_salon}',
+            reply_markup=confirm_salon_kb
+        )
+        await Global.confirm_salon.set()
 
 @dp.message_handler(state=Global.confirm_salon)
 async def command_confirm_salon(message: types.Message, state: FSMContext):

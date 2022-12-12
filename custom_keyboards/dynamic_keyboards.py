@@ -13,6 +13,8 @@ def form_2_row_keyboard(buttons: list):
             first_row_buttons = []
         if i == 0:
             formed_buttons.append(first_row_buttons)
+    
+    formed_buttons.append([KeyboardButton(text='Шаг назад')])
 
     dynamic_kb_menu = ReplyKeyboardMarkup(
         keyboard=formed_buttons,
