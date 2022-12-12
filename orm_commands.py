@@ -12,7 +12,8 @@ from timetable.models import (
     User,
     Master,
     Saloon,
-    Service
+    Service,
+    ServiceType
 )
 
 
@@ -46,7 +47,7 @@ def get_all_salons():
     return [salon.title for salon in Saloon.objects.all()] 
 
 def get_all_services():
-    return [service.name for service in Service.objects.all()]
+    return [f'{service.name} {str(service.price)} руб.' for service in ServiceType.objects.all()]
 
 def get_all_masters():
     return [master.fullname for master in Master.objects.all()]
