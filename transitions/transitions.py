@@ -5,6 +5,7 @@ from states.global_states import Global
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ReplyKeyboardRemove
 from orm_commands import is_user_registered
+from handlers.users.user_registration import unify_phone
 
 
 nearest_salon = {'title': 'nсалон1', 'address': 'nАдрес 1'}
@@ -92,7 +93,7 @@ async def goto_finish_order(message: types.Message, state: FSMContext):
     await message.answer(
         f"Данные заказа\n"
         f"Ваше имя: {order_data.get('fullname')}\n"
-        f"Телефон: {order_data.get('phone_number')}\n"
+        f"Телефон: {unify_phone(str(order_data.get('phone_number')))}\n"
         f"Салон: {order_data.get('selected_salon')}\n"
         f"Мастер: {order_data.get('selected_master')}\n"
         f"Услуга: {order_data.get('selected_service')}\n"
