@@ -5,10 +5,27 @@ from states.global_states import Global
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ReplyKeyboardRemove
 from orm_commands import is_user_registered
+import os
+import django
+from beauty_city.settings import *
+
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'bot_settings'
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+
+django.setup()
+
+
+from timetable.models import (
+    User,
+    Master,
+    Saloon,
+    Service
+)
 
 
 nearest_salon = {'title': 'nсалон1', 'address': 'nАдрес 1'}
-salons = ['Салон1','Салон2', 'Салон3', 'Салон4', 'Салон5']
+salons = [Saloon.objects.all()]
 services = ['Парикмахерская', 'Маникюр', 'Педикюр'] 
 masters = ['мастер1', 'Мастер2', 'мастер3', 'Мастер4', 'Мастер5', 'Мастер6', 'Мастер7', 'Мастер8']
 slots = [
