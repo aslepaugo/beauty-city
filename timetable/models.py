@@ -123,7 +123,17 @@ class Service(models.Model):
         help_text='Дата записи',
         verbose_name='Дата записи',
     )
-    time = models.TimeField(
+    TIME_CHOICES = (
+        ('1', '8.00-9.45'),
+        ('2', '10.00-11.45'),
+        ('3', '12.00-13.45'),
+        ('4', '14.00-15.45'),
+        ('5', '16.00-17.45'),
+        ('6', '18.00-19.45'),
+    )
+    time = models.CharField(
+        max_length=200,
+        choices=TIME_CHOICES,
         help_text='Время записи',
         verbose_name='Время записи'
     )
