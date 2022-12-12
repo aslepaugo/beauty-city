@@ -4,13 +4,16 @@ from custom_keyboards.static_keyboards import *
 from states.global_states import Global
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ReplyKeyboardRemove
-from orm_commands import is_user_registered
+from orm_commands import *
 from handlers.users.user_registration import unify_phone
 
 
-salons = ['Салон1','Салон2', 'Салон3', 'Салон4', 'Салон5']  # реализовать функцию в зависимости от наполнения await state.get_data()
-services = ['Парикмахерская', 'Маникюр', 'Педикюр'] # реализовать функцию в зависимости от наполнения await state.get_data()
-masters = ['мастер1', 'Мастер2', 'мастер3', 'Мастер4', 'Мастер5', 'Мастер6', 'Мастер7', 'Мастер8']# реализовать функцию в зависимости от наполнения await state.get_data()
+# salons = ['Салон1','Салон2', 'Салон3', 'Салон4', 'Салон5']  # реализовать функцию в зависимости от наполнения await state.get_data()
+# services = ['Парикмахерская', 'Маникюр', 'Педикюр'] # реализовать функцию в зависимости от наполнения await state.get_data()
+# masters = ['мастер1', 'Мастер2', 'мастер3', 'Мастер4', 'Мастер5', 'Мастер6', 'Мастер7', 'Мастер8']# реализовать функцию в зависимости от наполнения await state.get_data()
+services = get_all_services()
+masters = get_all_masters()
+salons = get_all_salons()
 slots = [
     '8:00 - 9:45',
     '10:00 - 11:45',

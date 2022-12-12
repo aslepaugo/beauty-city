@@ -45,6 +45,12 @@ def delete_all_User():
 def get_all_salons():
     return [salon.title for salon in Saloon.objects.all()] 
 
+def get_all_services():
+    return [service.name for service in Service.objects.all()]
+
+def get_all_masters():
+    return [master.fullname for master in Master.objects.all()]
+
 
 def get_nearest_salon(user_coordinates):
     if len(user_coordinates) != 2:
