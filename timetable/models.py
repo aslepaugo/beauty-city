@@ -4,6 +4,86 @@ from phonenumber_field.modelfields import PhoneNumberField
 from .utils.geo_helper import get_lat_lon
 
 
+class ServiceType(models.Model):
+    name = models.CharField(
+        max_length=100,
+        verbose_name='Услуга',
+        help_text='Введите тип услуги'
+    )
+
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name = 'Услуга'
+        verbose_name_plural = 'Типы услуг'
+
+
+class Saloon(models.Model):
+    title = models.CharField(
+        'Имя салона',
+        max_length=256
+    )
+    address = models.CharField(
+        'Адрес салона',
+        help_text='Адрес где находится салон',
+        max_length=200,
+    )
+
+    lat = models.FloatField(default=None, blank=True, null=True)
+    lon = models.FloatField(default=None, blank=True, null=True)
+    master = models.ManyToManyField(
+        'Master',
+        verbose_name='Мастера в салоне',
+        related_name='Saloons'
+    )
+
+    def save(self, *args, **kwargs):
+        self.lat, self.lon = get_lat_lon(self.address)
+        super(Saloon, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.title}, {self.address}'
+
+    class Meta:
+        verbose_name = 'Салон'
+        verbose_name_plural = 'Салоны'
+
+
+class Master(models.Model):
+    fullname = models.CharField(
+        max_length=100,
+        help_text='Введите имя и фамилию мастера',
+        verbose_name='Имя и фамилия мастера'
+    )
+    telegram_id = models.IntegerField(
+        verbose_name='Телеграм-ID мастера',
+        unique=True,
+    )
+    speciality = models.ForeignKey(
+        to=ServiceType,
+        related_name='Services',
+        on_delete=models.CASCADE,
+        help_text='Введите специальность',
+        verbose_name='Специальность мастера',
+    )
+    saloon = models.ForeignKey(
+        to=Saloon,
+        on_delete=models.CASCADE,
+        related_name='Saloon',
+        verbose_name='Салон',
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = 'Мастер'
+        verbose_name_plural = 'Мастера'
+
+    def __str__(self):
+        return f'{self.fullname}, {self.speciality}'
+
+
 class User(models.Model):
     telegram_id = models.IntegerField(
         verbose_name='Телеграм-ID клиента'
@@ -25,65 +105,20 @@ class User(models.Model):
         verbose_name_plural = 'Клиенты'
 
 
-class Master(models.Model):
-    fullname = models.CharField(
-        max_length=100,
-        help_text='Введите имя и фамилию мастера',
-        verbose_name='Имя и фамилия мастера'
-    )
-    telegram_id = models.IntegerField(
-        verbose_name='Телеграм-ID мастера'
-    )
-    speciality = models.CharField(
-        max_length=1000,
-        help_text='Введите специальность',
-        verbose_name='Специальность мастера',
-    )
-    saloon = models.ForeignKey(
-        to=Saloon,
-        on_delete=models.CASCADE,
-        related_name='masters',
-        verbose_name='Салон',
-    )
-
-    class Meta:
-        verbose_name = 'Мастер'
-        verbose_name_plural = 'Мастера'
-
-
-class Saloon(models.Model):
-    title = models.CharField(
-        'Имя салона',
-        max_length= 256
-    )
-    address = models.CharField(
-        'Адрес салона',
-        help_text='Адрес где находится салон',
-        max_length=200,
-    )
-    masters = models.ForeignKey(
-        to=Master,
-        on_delete=models.CASCADE,
-        related_name='saloons',
-        verbose_name='Мастер',
-        null=True
-    )
-    lat = models.FloatField(default=None, blank=True, null=True)
-    lon = models.FloatField(default=None, blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-        self.lat, self.lon = get_lat_lon(self.address)
-        super(Saloon, self).save(*args, **kwargs)
-
-    class Meta:
-        verbose_name = 'Салон'
-        verbose_name_plural = 'Салоны'
-
 
 class Service(models.Model):
     name = models.CharField(
         max_length=200,
         verbose_name='Название услуги',
+    )
+    CHOICES = (
+        ('Payed', 'Оплачен'),
+        ('Done', 'Выполнен'),
+        ('Cancel', 'Отменен'),
+    )
+    status = models.CharField(
+        max_length=200,
+        choices=CHOICES
     )
     price = models.IntegerField(
         verbose_name='Цена услуги'
@@ -107,6 +142,11 @@ class Service(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Салон'
     )
+
+
+    def __str__(self):
+        return f'{self.name}, {self.status}, {self.saloon}, {self.date}, {self.master}, {self.time}'
+
 
     class Meta:
         verbose_name = 'Услуга'
