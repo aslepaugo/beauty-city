@@ -9,7 +9,8 @@ from transitions.transitions import *
 @dp.message_handler(state=Global.finish_order)
 async def handler_finish_order(message: types.Message, state: FSMContext):
     if message.text == 'Подтвердить заказ':
-        # занести заказ в базу
+        data = await state.get_data()
+        print(data)
         await message.answer(
             'Заказ принят!'
         )
