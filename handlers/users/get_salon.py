@@ -13,6 +13,8 @@ import orm_commands
 @dp.message_handler(state=Global.start_select_salon)
 async def handler_from_salon(message: types.Message, state: FSMContext):
     if message.text == 'Выбрать салон из списка...':
+        current_state =  await state.get_data() 
+        salons = orm_commands.get_salons_filtered(master=current_state.get('master'), service_name=current_state.get('selected_service'))
         await Global.select_salon.set()
         await message.answer(
             f'Выберите салон из списка:', reply_markup=form_2_row_keyboard(salons)

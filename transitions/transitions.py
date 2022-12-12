@@ -26,6 +26,12 @@ async def goto_masters(message: types.Message, state: FSMContext):
     # await message.answer(
     #     f'DATA для тестирования {await state.get_data()}'
     # )
+    current_state =  await state.get_data() 
+    masters = get_master_filtered(
+        salon_title=current_state.get('selected_salon'),
+        service_name=current_state.get('selected_service')
+        )
+  
     await Global.start_select_master.set()
     await message.answer(
         'Выберите мастера',
@@ -36,6 +42,8 @@ async def goto_services(message: types.Message, state: FSMContext):
     # await message.answer(
     #     f'DATA для тестирования {await state.get_data()}'
     # )
+    current_state =  await state.get_data() 
+    services = get_service_filtered(salon_title=current_state.get('selected_salon'), master=current_state.get('master'))
     await message.answer(
         'Выберите нужную процедуру:',
         reply_markup=form_2_row_keyboard(services)
