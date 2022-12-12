@@ -4,6 +4,7 @@ from beauty_city.settings import *
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'bot_settings'
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+
 django.setup()
 
 
@@ -13,6 +14,7 @@ from timetable.models import (
     Saloon,
     Service
 )
+
 
 from timetable.utils.geo_helper import find_closest_lat_lon
 
@@ -51,11 +53,6 @@ def get_nearest_salon(user_coordinates):
         saloons = Saloon.objects.values()
         closest_salon = find_closest_lat_lon(user_coordinates, saloons)
         return closest_salon
-
-
-def get_list():
-    saloon = Saloon.objects.all()
-    return saloon
 
 
 if __name__ == '__main__':

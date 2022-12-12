@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
-from .models import User, Master, Saloon, Service
+from .models import User, Master, Saloon, Service, ServiceType
 
 
 @admin.register(User)
@@ -11,16 +11,22 @@ class User(admin.ModelAdmin):
 @admin.register(Master)
 class Master(admin.ModelAdmin):
     list_display = (
-        'fullname', 'speciality', 'saloon'
+        'fullname', 'speciality',
     )
+    raw_id_fields = ('saloon',)
 
 
 @admin.register(Saloon)
 class Saloon(admin.ModelAdmin):
-    list_display = ['address']
+    list_display = ['title', 'address']
     readonly_fields = ['lat', 'lon']
 
 
 @admin.register(Service)
 class Service(admin.ModelAdmin):
-    list_display = ['name', 'master', 'time', 'date', 'saloon']
+    list_display = ['name', 'time', 'date', 'master', 'saloon']
+
+
+@admin.register(ServiceType)
+class ServiceType(admin.ModelAdmin):
+    list_display = ['name']
