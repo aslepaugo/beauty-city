@@ -48,15 +48,22 @@ async def goto_salons(message: types.Message, state: FSMContext):
         f'либо выбрать салон из списка:', reply_markup=st3_kb_menu)
     await Global.start_select_salon.set()
 
-async def goto_date(message: types.Message, state: FSMContext):
+async def goto_date(message: types.Message, state: FSMContext, error=None):
     await message.answer(
         f'DATA для тестирования {await state.get_data()}'
     )
-    await message.answer(
-        f'Введите дату',
-        reply_markup=ReplyKeyboardRemove()
-    )
-    await Global.start_select_date.set()
+    if error is None:
+        await message.answer(
+            f'Введите дату в формате (dd/mm/yyyy)',
+            reply_markup=ReplyKeyboardRemove()
+        )
+        await Global.start_select_date.set()
+    else:
+        await message.answer(
+            error,
+            reply_markup=ReplyKeyboardRemove()
+        )
+        await Global.start_select_date.set()
 
 async def goto_slot(message: types.Message, state: FSMContext):
     await message.answer(
