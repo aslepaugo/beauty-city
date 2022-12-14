@@ -13,7 +13,7 @@ bot = Bot(TG_BOT_TOKEN)
 storage = MemoryStorage()
 
 pool = redis.ConnectionPool(host='localhost', port=6379, db=0)
-cursor = redis.Redis(connection_pool=pool, charset='utf-8', decode_responses=True)
+redis_cursor = redis.Redis(connection_pool=pool, charset='utf-8', decode_responses=True)
 
 dp = Dispatcher(bot, storage=storage)
 

@@ -1,7 +1,7 @@
 
 from aiogram import Dispatcher
 
-from config import admin_ids
+from bot_auxiliary.config import admin_ids
 
 
 async def on_startup_notify(dp: Dispatcher):

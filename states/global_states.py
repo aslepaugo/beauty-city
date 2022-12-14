@@ -1,7 +1,7 @@
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
 
-class Global(StatesGroup):
+class Global_states(StatesGroup):
     start_oder = State()
     start_bot = State()
 

@@ -31,7 +31,7 @@ def is_user_registered(telegram_id):
             }
         
     except User.DoesNotExist:
-        print('нет пользователя')
+        pass
 
     if user:
         return user

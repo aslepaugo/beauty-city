@@ -20,10 +20,4 @@ async def check_date(selected_date: str, state: FSMContext):
     else:
         return [True, valid_date]
 
-
-
-
-# input_dates=['11/12/2022', '12/12/2022', '12/13/2022', '6zds54szdf']
-
-# for input_date in input_dates:
-#     print(check_date(input_date))
+# дописать проверку даты на занятость слотов

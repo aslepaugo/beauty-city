@@ -1,19 +1,19 @@
+import os
+
 from loguru import logger
+from bot_auxiliary import on_startup_notify, set_default_commands
+
 
 logger.add(
-    'debug.log',
+    os.path.join('log', 'debug.log'),
     format='{time}  {level}  {message}',
     level='DEBUG',
 )
 
-
 async def on_startup(dp):
-    from utils.notify_admins import on_startup_notify
     await on_startup_notify(dp)
-    logger.info('Бот запущен')
-    from utils.set_bot_commands import set_default_commands
     await set_default_commands(dp)
-
+    logger.info('Бот запущен')
     
 if __name__ == '__main__':
     from aiogram import executor

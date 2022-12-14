@@ -1,12 +1,13 @@
 from aiogram import types
-from loader import dp
-from custom_keyboards.static_keyboards import *
-from states.global_states import Global
+from states.global_states import Global_states
 from aiogram.dispatcher import FSMContext
+
+from bot_auxiliary.loader import dp
+from bot_custom_keyboards.static_keyboards import get_static_keyboard
 from transitions.transitions import *
 
 
-@dp.message_handler(state=Global.start_select_master)
+@dp.message_handler(state=Global_states.start_select_master)
 async def handler_start_select_master(message: types.Message, state: FSMContext):
     selected_master = message.text
     if selected_master == 'Шаг назад':
@@ -15,11 +16,11 @@ async def handler_start_select_master(message: types.Message, state: FSMContext)
         await state.update_data(selected_master=selected_master)
         await message.answer(
             f'Выбран мастер: {selected_master}',
-            reply_markup=confirm_master_kb
+            reply_markup=await get_static_keyboard(['Подтвердить выбор мастера', 'Выбрать другого мастера'])
         )
-        await Global.confirm_master.set()
+        await Global_states.confirm_master.set()
 
-@dp.message_handler(state=Global.confirm_master)
+@dp.message_handler(state=Global_states.confirm_master)
 async def command_confirm_master(message: types.Message, state: FSMContext):
     if message.text == 'Подтвердить выбор мастера':
         way = await state.get_data()

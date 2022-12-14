@@ -1,13 +1,14 @@
 from aiogram import types
-from loader import dp
-from custom_keyboards.static_keyboards import *
-from states.global_states import Global
+from states.global_states import Global_states
 from aiogram.dispatcher import FSMContext
+
+from bot_auxiliary.loader import dp
+from bot_custom_keyboards.static_keyboards import *
 from transitions.transitions import *
 from transitions.check_date import check_date
 
 
-@dp.message_handler(state=Global.start_select_date)
+@dp.message_handler(state=Global_states.start_select_date)
 async def handler_start_select_date(message: types.Message, state: FSMContext):
     selected_date = message.text
     is_valid_date = await check_date(selected_date, state)

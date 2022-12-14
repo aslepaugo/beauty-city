@@ -1,30 +1,24 @@
 from aiogram import types
-from loader import dp, cursor
-from custom_keyboards.dynamic_keyboards import form_2_row_keyboard
-from custom_keyboards.static_keyboards import *
-from states.global_states import Global
+from states.global_states import Global_states
 from aiogram.dispatcher import FSMContext
+
+from bot_auxiliary.loader import dp, redis_cursor
+from bot_custom_keyboards.static_keyboards import get_static_keyboard, ok_button_request_location
 from transitions.transitions import *
 
 import orm_commands
-#from asgiref.sync import sync_to_async
 
 
-@dp.message_handler(state=Global.start_select_salon)
+@dp.message_handler(state=Global_states.start_select_salon)
 async def handler_from_salon(message: types.Message, state: FSMContext):
     if message.text == 'Выбрать салон из списка...':
-        current_state =  await state.get_data() 
-        salons = orm_commands.get_salons_filtered(master=current_state.get('master'), service_name=current_state.get('selected_service'))
-        await Global.select_salon.set()
-        await message.answer(
-            f'Выберите салон из списка:', reply_markup=form_2_row_keyboard(salons)
-        )
+        await goto_salons_from_list(message, state)
     elif message.text == 'Ближайший салон':
         #----------redis cache
         data = await state.get_data()
-        cursor.flushall()
+        redis_cursor.flushall()
         for key, value in data.items():
-            cursor.set(key, value)
+            redis_cursor.set(key, value)
         #---------------------
         await state.finish()
         await message.answer(
@@ -37,9 +31,9 @@ async def handle_location(message: types.Message, state: FSMContext):
     await goto_salons(message, state)
       #redis cache-----------
     redis_dict = {}
-    for key in cursor.keys():
-        redis_dict[key.decode('utf-8')] = cursor.get(key).decode('utf-8')
-    cursor.flushdb()    
+    for key in redis_cursor.keys():
+        redis_dict[key.decode('utf-8')] = redis_cursor.get(key).decode('utf-8')
+    redis_cursor.flushdb()    
     await state.update_data(redis_dict)
     #-----------------------
     
@@ -54,18 +48,20 @@ async def handle_location(message: types.Message, state: FSMContext):
 
     #redis cache-----------
     redis_dict = {}
-    for key in cursor.keys():
-        redis_dict[key.decode('utf-8')] = cursor.get(key).decode('utf-8')
-    cursor.flushdb()    
+    for key in redis_cursor.keys():
+        redis_dict[key.decode('utf-8')] = redis_cursor.get(key).decode('utf-8')
+    redis_cursor.flushdb()    
     await state.update_data(redis_dict)
     #-----------------------
     await state.update_data(selected_salon=nearest_salon['title'])
     reply = f"Ближайший салон: {nearest_salon['title']} ({nearest_salon['address']})"
-    await message.answer(reply, reply_markup=confirm_salon_kb)
-    await Global.confirm_salon.set()  
+    await message.answer(
+        reply,
+        reply_markup=await get_static_keyboard(['Подтвердить салон', 'Выбрать другой салон']))
+    await Global_states.confirm_salon.set()  
 
 
-@dp.message_handler(state=Global.select_salon)
+@dp.message_handler(state=Global_states.select_salon)
 async def command_select_salon(message: types.Message, state: FSMContext):
     selected_salon = message.text
     if selected_salon == 'Шаг назад':
@@ -74,11 +70,11 @@ async def command_select_salon(message: types.Message, state: FSMContext):
         await state.update_data(selected_salon=selected_salon)
         await message.answer(
             f'Выбран салон: {selected_salon}',
-            reply_markup=confirm_salon_kb
+            reply_markup=await get_static_keyboard(['Подтвердить салон', 'Выбрать другой салон'])
         )
-        await Global.confirm_salon.set()
+        await Global_states.confirm_salon.set()
 
-@dp.message_handler(state=Global.confirm_salon)
+@dp.message_handler(state=Global_states.confirm_salon)
 async def command_confirm_salon(message: types.Message, state: FSMContext):
     if message.text == 'Подтвердить салон':
         way = await state.get_data()

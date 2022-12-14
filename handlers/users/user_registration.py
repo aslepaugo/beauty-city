@@ -1,9 +1,11 @@
-from loader import dp
 from aiogram import types
+from states.global_states import Global_states
 from aiogram.dispatcher import FSMContext
-from states.global_states import Global
+
+from bot_auxiliary.loader import dp
+from bot_custom_keyboards.static_keyboards import get_static_keyboard
 import transitions.transitions
-from custom_keyboards.static_keyboards import clear_button
+
 import orm_commands
 
 
@@ -19,33 +21,33 @@ def unify_phone(raw_input: str):
         return False
 
 
-@dp.message_handler(state=Global.start_registration)
+@dp.message_handler(state=Global_states.start_registration)
 async def register(message: types.Message, state: FSMContext):
     if message.text == 'Согласен(на)':
         await message.answer(
             'Введите своё имя:',
             reply_markup=types.ReplyKeyboardRemove()
         )
-        await Global.enter_name.set()
+        await Global_states.enter_name.set()
     else:
         await message.answer(
             'Для продолжения необходимо дать разрешение на обработку персональных данных',
-            reply_markup=clear_button
+            reply_markup=await get_static_keyboard(['Понятно'])
         )
-        await Global.cancel.set()
+        await Global_states.cancel.set()
 
-@dp.message_handler(state=Global.cancel)
+@dp.message_handler(state=Global_states.cancel)
 async def handler_cancel(message: types.Message, state: FSMContext):
     await transitions.transitions.goto_registration(message, state) 
 
-@dp.message_handler(state=Global.enter_name)
+@dp.message_handler(state=Global_states.enter_name)
 async def state_enter_name(message: types.Message, state: FSMContext):
     user_name = message.text
     await state.update_data(fullname=user_name)
     await message.answer('Введите номер телефона:')
-    await Global.enter_phone_number.set()
+    await Global_states.enter_phone_number.set()
 
-@dp.message_handler(state=Global.enter_phone_number)
+@dp.message_handler(state=Global_states.enter_phone_number)
 async def state_enter_phone_number(message: types.Message, state: FSMContext):
     phone_number = unify_phone(message.text)
     if phone_number:

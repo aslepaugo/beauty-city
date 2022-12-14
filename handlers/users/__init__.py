@@ -6,7 +6,6 @@ from .get_date import dp
 from .get_slot import dp
 from .finish_oder import dp
 from .user_registration import dp
-from .personal_account import dp
 
 
 __all__ = ['dp']

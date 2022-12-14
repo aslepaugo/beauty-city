@@ -1,12 +1,14 @@
 from aiogram import types
-from loader import dp
-from custom_keyboards.static_keyboards import *
-from states.global_states import Global
+from states.global_states import Global_states
 from aiogram.dispatcher import FSMContext
+
+from bot_auxiliary.loader import dp
+from bot_custom_keyboards.static_keyboards import get_static_keyboard
 from transitions.transitions import *
 
+
     
-@dp.message_handler(state=Global.start_select_service)
+@dp.message_handler(state=Global_states.start_select_service)
 async def handler_start_select_service(message: types.Message, state: FSMContext):
     selected_service = message.text
     if selected_service == 'Шаг назад':
@@ -15,11 +17,11 @@ async def handler_start_select_service(message: types.Message, state: FSMContext
         await state.update_data(selected_service= selected_service)
         await message.answer(
             f'Выбрана услуга: {selected_service}',
-            reply_markup=confirm_service_kb
+            reply_markup=await get_static_keyboard(['Подтвердить выбор услуги', 'Выбрать другую услугу'])
         )
-        await Global.confirm_service.set()
+        await Global_states.confirm_service.set()
 
-@dp.message_handler(state=Global.confirm_service)
+@dp.message_handler(state=Global_states.confirm_service)
 async def command_confirm_service(message: types.Message, state: FSMContext):
     if message.text == 'Подтвердить выбор услуги':
         way = await state.get_data()
